@@ -5,7 +5,7 @@ using Cinemachine;
 
 public class CineCam : MonoBehaviour
 {
-    public CinemachineVirtualCamera virtualcam;
+    CinemachineVirtualCamera virtualcam;
     // Start is called before the first frame update
     void Awake()
     {

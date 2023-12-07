@@ -1,3 +1,12 @@
+/*
+ 작성자 : 서재웅
+ 날짜 : 2023 - 12 - 07
+ 기능
+// Archer 클래스는 플레이어의 공격과 아이템 획득을 관리합니다.
+// 플레이어의 무기 공격, 스킬 사용, 아이템 획득에 대한 동작을 담당합니다.
+// 입력, 무기 공격, 아이템 획득에 따른 능력치 조절 등을 수행합니다.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -93,6 +102,7 @@ public class Archer : MonoBehaviour
                 default:
                     break;
             }
+            Destroy(other.gameObject);
         }
     }
 }

@@ -1,3 +1,12 @@
+/*
+ 작성자 : 서재웅
+ 날짜 : 2023 - 12 - 07
+ 기능
+// Enemy0 클래스는 적 캐릭터의 행동 및 상태를 관리하며, 추적, 공격, 피격, 아이템 드롭 등을 처리합니다.
+// 플레이어를 추적하고, 공격하며, 플레이어의 무기 또는 총알과 충돌하여 피해를 입는 상황을 처리하고, 적의 상태 및 아이템 드롭을 관리합니다.
+// 적의 상태 변화, 공격 동작, 피격 효과, 아이템 드롭 등을 다루며, 플레이어와 상호작용하여 게임 전투 시스템을 구현합니다.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +14,6 @@ using UnityEngine.AI;
 
 public class Enemy0 : MonoBehaviour
 {
-    
     public enum Type { A, B, C, D};
 
     [Header("EnemyState")]
@@ -17,13 +25,19 @@ public class Enemy0 : MonoBehaviour
     public Transform missilePortA;
     public Transform missilePortB;
     public GameObject missile;
-    public GameObject[] itemPrefab;
     public bool isDead = false;
     public float defence;
     public float speed;
     bool isFound = false;
-    public int dropcnt = 0;
     bool isBorder = false;
+
+    [Header("Drop Item")]
+    public GameObject[] itemPrefab;
+    public GameObject[] potionPrefabs;
+    public Transform dropPosition;
+    public Transform potionDrop_P;
+    int dropcnt = 0;
+    int potionDrpoCnt = 0;
 
     [Header("Player Chase")]
     public Transform target;
@@ -38,7 +52,7 @@ public class Enemy0 : MonoBehaviour
     BoxCollider box;
     SphereCollider findSphere;
 
-    void Awake()
+    void Start()
     {
         target = FindObjectOfType<PlayerM>().transform;
         rigid = GetComponentInChildren<Rigidbody>();
@@ -47,10 +61,7 @@ public class Enemy0 : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         box = GetComponentInChildren<BoxCollider>();
         findSphere = GetComponent<SphereCollider>();
-    }
 
-    private void Start()
-    {
         nav.speed = 0;
     }
 
@@ -204,16 +215,21 @@ public class Enemy0 : MonoBehaviour
     {
         if (dropcnt == 0) 
         {
-            int luck = Random.Range(0, 2);
+            int luck = Random.Range(1, 2);
             if (luck == 1)
             {
                 int rand = Random.Range(0, itemPrefab.Length);
-                Vector3 spawnItem = new Vector3(transform.position.x, transform.position.y + 3.0f, transform.position.z);
-                Instantiate(itemPrefab[rand], spawnItem, this.transform.rotation);
+                Instantiate(itemPrefab[rand], dropPosition.position, dropPosition.rotation);
                 dropcnt++;
             }
             else
                 Debug.Log("Fall");
+        }
+        if (potionDrpoCnt == 0)
+        {
+            int ran = Random.Range(0, 2);
+            Instantiate(potionPrefabs[ran], potionDrop_P.position, potionDrop_P.rotation);
+            potionDrpoCnt++;
         }
     }
 

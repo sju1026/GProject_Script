@@ -1,22 +1,29 @@
+/*
+ 작성자 : 서재웅
+ 날짜 : 2023 - 12 - 07
+ 기능
+// PlayerM 스크립트는 플레이어의 상태, 스킬, 움직임, 상호작용, 능력치, 입력 등을 관리합니다.
+// 플레이어의 이동, 점프, 회피, 공격 및 스킬 사용, 아이템 획득 및 피해 처리 등을 담당합니다.
+// 입력, 움직임, 스킬 사용, 상호작용, 플레이어 상태 감지, 피해 처리, 능력치 조정 등을 처리합니다.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XEntity.InventoryItemSystem;
+using Cinemachine;
 
 public class PlayerM : MonoBehaviour
 {
     [Header("Player State")]
     public float speed;
-    public float plusSpeed;
     public int health;
     public int maxHealth;
     public int mp;
     public int maxMP;
     public float defence;
-    public float plusDefence;
     public bool isDead;
     public int stageClear_Key_Num = 0;
-
 
     [Header("Player Skill Enforce")]
     public int normalnum;
@@ -30,10 +37,9 @@ public class PlayerM : MonoBehaviour
     public int boostLevel;
 
     [Header("Cam")]
-    public Camera followCamera;
+    public Camera cam;
     float hAxis;
     float vAxis;
-
 
     [Header("Player KeySetting")]
     #region InputButton
@@ -48,11 +54,13 @@ public class PlayerM : MonoBehaviour
     public bool isJump;
     public bool isDodge;
     public bool isBorder;
+    bool tDown;
     #endregion
 
     [Header("Player Object")]
     public GameObject boostObject;
     public GameObject finalAttack;
+    public CinemachineVirtualCamera virtualCam;
 
     Vector3 moveVec;
     Vector3 dodgeVec;
@@ -60,8 +68,13 @@ public class PlayerM : MonoBehaviour
     public CapsuleCollider cap;
     public Rigidbody rb;
     public Animator anim;
-    public ItemBox box;
     public Weapons weapon;
+    AOD aod;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
 
     void Start()
     {
@@ -69,8 +82,11 @@ public class PlayerM : MonoBehaviour
         anim = GetComponent<Animator>();
         cap = GetComponent<CapsuleCollider>();
         weapon = GetComponentInChildren<Weapons>();
+        virtualCam = FindObjectOfType<CinemachineVirtualCamera>();
+        cam = FindObjectOfType<Camera>();
+        aod = FindObjectOfType<AOD>();
 
-        if (!isDead)
+        if (isDead == false)
         {
             maxHealth = 100;
             health = maxHealth;
@@ -78,7 +94,6 @@ public class PlayerM : MonoBehaviour
             speed = 15.0f;
             mp = maxMP;
             defence = 10.0f;
-
             weapon.isBoost = true;
         }
     }
@@ -92,6 +107,8 @@ public class PlayerM : MonoBehaviour
         Dodge();
         Boost();
         FinalAttack();
+        Zoom();
+        Tap();
     }
 
     void GetInput()
@@ -106,6 +123,8 @@ public class PlayerM : MonoBehaviour
         kDown = Input.GetButtonDown("Kick"); // C
         iDown = Input.GetButton("Interaction"); // F
         finalDown = Input.GetButtonDown("FinalAttack"); // R
+
+        tDown = Input.GetButtonDown("Tap"); // T
     }
 
     #region Movement
@@ -129,9 +148,9 @@ public class PlayerM : MonoBehaviour
     {
         transform.LookAt(transform.position + moveVec);
 
-        if (fDown || f2Down || kDown && !isDead)
+        if (fDown || f2Down || kDown || finalDown && !isDead)
         {
-            Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit rayHit;
             if (Physics.Raycast(ray, out rayHit, 100))
             {
@@ -192,6 +211,15 @@ public class PlayerM : MonoBehaviour
     {
         FreezeRotation();
         StopToWall();
+    }
+
+    void Zoom()
+    {
+        Vector2 scrollDelta = Input.mouseScrollDelta;
+
+        Debug.Log("Up");
+        virtualCam.m_Lens.FieldOfView = Mathf.Clamp(virtualCam.m_Lens.FieldOfView -  scrollDelta.y, 40, 100);
+        
     }
     #endregion
 
@@ -289,6 +317,16 @@ public class PlayerM : MonoBehaviour
     }
     #endregion
 
+    void Tap()
+    {
+        if (tDown && isDead == false)
+        {
+            aod.pausePanel.SetActive(true);
+            Time.timeScale = 0;
+            aod.isPause = true;
+            return;
+        }
+    }
 
     private void OnCollisionEnter(Collision col)
     {
@@ -308,11 +346,7 @@ public class PlayerM : MonoBehaviour
 
             if (health <= 0)
             {
-                health = 0;
-                isDead = true;
-                anim.SetTrigger("doDie");
-                cap.enabled = false;
-                rb.useGravity = false;
+                GameManager.instance.PlayerDie();
             }
      
         }
@@ -341,15 +375,27 @@ public class PlayerM : MonoBehaviour
                 case Item.Type.StageClearKey:
                     stageClear_Key_Num++;
                     item.sphere.enabled = false;
+                    Destroy(other.gameObject);
                     break;
                 case Item.Type.MP:
                     if (mp + (int)item.value >= 100)
                     {
                         mp = 100;
                     }
-                    else if(mp < 100)
+                    else if (mp < 100)
                     {
                         mp += (int)item.value;
+                    }
+                    Destroy(other.gameObject);
+                    break;
+                case Item.Type.HP:
+                    if (health + (int)item.value >= 100)
+                    {
+                        health = 100;
+                    }
+                    else if (health < 100)
+                    {
+                        health += (int)item.value;
                     }
                     Destroy(other.gameObject);
                     break;

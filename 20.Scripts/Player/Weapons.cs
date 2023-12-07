@@ -1,3 +1,12 @@
+/*
+ 작성자 : 서재웅
+ 날짜 : 2023 - 12 - 07
+ 기능
+// Weapons 스크립트는 무기의 특성과 행동을 제어합니다.
+// 특정 무기 유형(Sword, Bow)에 따라 공격, 스킬, 공격 쿨타임 및 아이템 상호작용을 담당합니다.
+// 각 무기 유형마다의 공격 및 스킬 로직, 쿨타임 관리 등을 수행합니다.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -302,7 +311,7 @@ public class Weapons : MonoBehaviour
         Rigidbody bulletRb = instantBullet.GetComponent<Rigidbody>();
         bulletRb.velocity = bulletPos.forward * 50;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.1f);
 
         trailEffect.enabled = false;
 

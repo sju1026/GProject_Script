@@ -1,9 +1,20 @@
+/*
+ 작성자 : 서재웅
+ 날짜 : 2023 - 12 - 07
+ 기능
+// GameManager는 게임 관리와 씬 간의 전환을 담당하며, 플레이어 상태, 미션 및 스테이지 게이트, 보상 처리 등을 관리합니다.
+// 각 스테이지에 따라 플레이어 캐릭터를 생성하고, 스테이지 진행 상황을 감지하여 게이트의 활성화 상태를 변경합니다.
+// 미션 완료 여부를 추적하고, 플레이어 사망 시 상태를 초기화하고 패널을 표시하여 게임 상태를 관리합니다.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XEntity.InventoryItemSystem;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,33 +38,22 @@ public class GameManager : MonoBehaviour
     public GameObject gameCam;
     public PlayerM player;
     public Weapons weapon;
+    Interactor interactor;
+    public AOD aod;
+    public bool isStart = false;
+    [SerializeField]int stageNum;
+    public GameObject warriorPrefeb;
+    public GameObject archorPrefeb;
+    public Transform startPoint;
 
-    public GameObject menuPannel;
-    public GameObject gamePannel;
-    public GameObject overPannel;
-
-    bool isStart = false;
-    public bool missionClear = false;
-
-
-    [Header("Player State")]
-    public float playTime;
-    public Text playTimeTxt;
-
-    public Text damageTxt;
-    public Text speedTxt;
-    public Text depenceTxt;
-    public Text attackRateTxt;
-
-    public Text normalTxt;
-    public Text skillTxt;
-    public Text kickTxt;
-    public Text boostTxt;
-
-    public Text playerHealthTxt;
-    public Text playerMpTxt;
-    public RectTransform playerHealthBar;
-    public RectTransform playerMPBar;
+    [Header("Player Base State")]
+    [SerializeField] int baseHealth = 100;
+    [SerializeField] int baseMaxHealth = 100;
+    [SerializeField] int baseMp = 100;
+    [SerializeField] int baseMaxMp = 100;
+    [SerializeField] float baseSpeed = 10.0f;
+    [SerializeField] int baseDamage = 20;
+    [SerializeField] float baseDefence = 10.0f;
 
     [Header("Mission Gate")]
     public GameObject other1Door;
@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     public GameObject jumpMissionText;
     public Fire[] fireMissions;
     public int num = 0;
+    public bool missionClear = false;
 
     [Header("Stage Gate")]
     public GameObject[] stage1;
@@ -86,105 +87,81 @@ public class GameManager : MonoBehaviour
     public GameObject box;
     public GameObject Tp;
 
-    /*[Header("Stage Boolean")]
-    bool stageClear_1 = false;
-    bool stageClear_2 = false;
-    bool stageClear_3 = false;
-    bool stageClear_4 = false;
-    bool stageClear_5 = false;
-    bool stageClear_6 = false;
-    bool stageClear_7 = false;
-    bool stageClear_8 = false;
-    bool stageClear_9 = false;
-    bool stageClear_10 = false;
-    bool stageClear_11 = false;
-    bool stageClear_12 = false;
-    bool stageClear_13 = false;*/
-
     void Awake()
+    {
+        isStart = true;
+        this.enabled = true;
+        StageCreateCharacter();
+    }
+
+    void StageCreateCharacter()
+    {
+        if (stageNum == 1 || stageNum == 2)
+        {
+            int selectNum = 0;
+            if (stageNum == 1 && selectNum == 0)
+            {
+                GameObject warrior = Instantiate(warriorPrefeb);
+                warrior.transform.position = new Vector3(0, 0.11f, 0);
+                selectNum++;
+            }
+            if(stageNum == 2 & selectNum == 0)
+            {
+                GameObject archor = Instantiate(archorPrefeb);
+                archor.transform.position = new Vector3(0, 0.11f, 0);
+                selectNum++;
+            }
+        }
+    }
+
+    void Found()
     {
         player = FindObjectOfType<PlayerM>();
         weapon = FindObjectOfType<Weapons>();
+        aod = FindObjectOfType<AOD>();
+        interactor = player.GetComponent<Interactor>();
     }
 
     private void Start()
     {
-        isStart = true;
+        Found();
+        Camera[] cams = FindObjectsOfType<Camera>();
+        for (int i = 0; i < 2; i++)
+        {
+            if (cams[i].tag == "MainCamera")
+            {
+                Debug.Log("Find Cam");
+                player.cam = cams[i];
+                interactor.mainCamera = cams[i];
+            }
+        }
+        player.virtualCam = FindObjectOfType<CinemachineVirtualCamera>();
     }
 
     void Update()
     {
-        if (isStart)
+        if (stageNum == 3)
         {
-            playTime += Time.deltaTime;
+            if (stage1Monster.Length == 0)
+            {
+                other1Door.SetActive(true);
+            }
+            else if (stage2Monster.Length == 0)
+            {
+                other2Door.SetActive(true);
+            }
+            else if (stage3Monster.Length == 0)
+            {
+                other3Door.SetActive(true);
+            }
         }
-
-        if (stage1Monster.Length == 0)
-        {
-            other1Door.SetActive(true);
-        }
-        else if (stage2Monster.Length == 0)
-        {
-            other2Door.SetActive(true);
-        }
-        else if (stage3Monster.Length == 0)
-        {
-            other3Door.SetActive(true);
-        }
-
-       
-    }
-
-    void LateUpdate()
-    {
-        // Timer
-        int hour = (int)(playTime / 3600);
-        int min = (int)((playTime - hour * 3600) / 60);
-        int sec = (int)(playTime % 60);
-        playTimeTxt.text = string.Format("{0:00}", hour) + ":" + string.Format("{0:00}", min) + ":" + string.Format("{0:00}", sec);
-
-        // Player State
-        playerHealthTxt.text = player.health + " / " + player.maxHealth;
-        playerMpTxt.text = player.mp + " / " + player.maxMP;
-
-        playerHealthBar.localScale = new Vector3((float)player.health / player.maxHealth, 1, 1);
-        playerMPBar.localScale = new Vector3((float)player.mp / player.maxMP, 1, 1);
-
-
-        damageTxt.text = weapon.damage.ToString();
-        speedTxt.text = player.speed.ToString();
-        depenceTxt.text = player.defence.ToString();
-        attackRateTxt.text = weapon.rate.ToString();
-
-        normalTxt.text = player.normalLevel.ToString();
-        skillTxt.text = player.skillLevel.ToString();
-        kickTxt.text = player.kickLevel.ToString();
-        boostTxt.text = player.boostLevel.ToString();
-
-        // CheckMonster();
-
     }
 
     public void Mission()
     {
         if (!missionClear)
         {
-            for (int i = 0; i < fireMissions.Length; i++)
-            {
-                if (fireMissions[i].isLight == true)
-                {
-                    num++;
-
-                    Debug.Log("Mission true");
-                }
-                else if (fireMissions[i].isLight == false)
-                {
-                    num--;
-
-                    Debug.Log("Mission false");
-                }
-            }
-            if (num == 100)
+            if (num == fireMissions.Length - 1)
             {
                 missionClear = true;
                 box.SetActive(true);
@@ -196,250 +173,24 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDie()
     {
+        player.isDead = true;
         player.anim.SetTrigger("doDie");
         player.health = 0;
-        player.isDead = true;
+        player.cap.enabled = false;
         player.rb.useGravity = false;
         player.rb.velocity = Vector3.zero;
-
+        aod.playPanel.SetActive(false);
+        aod.diePanel.SetActive(true);
+        PlayerStateReset();
     }
 
-    /*public void CheckMonster()
+    public void PlayerStateReset()
     {
-        int testsum = 0;
-
-        for (int i = 0; i < stage1.Length; i++)
-        {
-            if (stage1[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage1.Length) {
-                stageClear_1 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage2.Length; i++)
-        {
-            if (stage2[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage2.Length)
-            {
-                stageClear_2 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage3.Length; i++)
-        {
-            if (stage3[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage3.Length)
-            {
-                stageClear_3 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage4.Length; i++)
-        {
-            if (stage4[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage4.Length)
-            {
-                stageClear_4 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage5.Length; i++)
-        {
-            if (stage5[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage5.Length)
-            {
-                stageClear_5 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage6.Length; i++)
-        {
-            if (stage6[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage6.Length)
-            {
-                stageClear_6 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage7.Length; i++)
-        {
-            if (stage7[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage7.Length)
-            {
-                stageClear_7 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage8.Length; i++)
-        {
-            if (stage8[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage8.Length)
-            {
-                stageClear_8 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage9.Length; i++)
-        {
-            if (stage9[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage9.Length)
-            {
-                stageClear_9 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage10.Length; i++)
-        {
-            if (stage10[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage10.Length)
-            {
-                stageClear_10 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage11.Length; i++)
-        {
-            if (stage11[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage11.Length)
-            {
-                stageClear_11 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage12.Length; i++)
-        {
-            if (stage12[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage12.Length)
-            {
-                stageClear_12 = true;
-                testsum = 0;
-            }
-        }
-
-        for (int i = 0; i < stage13.Length; i++)
-        {
-            if (stage13[i] == null)
-            {
-                testsum += 1;
-            }
-            else
-            {
-                testsum += 0;
-            }
-
-            if (testsum == stage13.Length)
-            {
-                stageClear_13 = true;
-                testsum = 0;
-            }
-        }
-    }*/
-
+        player.maxHealth = baseMaxHealth;
+        player.health = baseHealth;
+        player.maxMP = baseMaxMp;
+        player.speed = baseSpeed;
+        player.defence = baseDefence;
+        player.weapon.damage = baseDamage;
+    }
 }

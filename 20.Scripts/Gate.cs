@@ -1,3 +1,12 @@
+/*
+ 작성자 : 서재웅
+ 날짜 : 2023 - 12 - 07
+ 기능
+// Gate는 게임 스테이지 간의 이동을 관리하며, 게이트 열고 닫기, 스테이지 클리어 감지를 수행합니다.
+// 스테이지 클리어 상태에 따라 게이트를 열거나 닫아 플레이어의 이동을 제어하며, 특정 이벤트 발생 시 게이트 동작을 처리합니다.
+// 게이트의 이동 및 활성화 여부를 체크하여 플레이어와 상호작용하며, 게임 플레이에 필요한 스테이지 간 이동을 제어합니다.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,18 +15,19 @@ using UnityEngine;
 public class Gate : MonoBehaviour
 {
     public GameObject[] stageList;
+    public GameObject otherGate;
 
     public PlayerM player;
-    BoxCollider box;
+    public BoxCollider box;
 
     public float gateMoveValue;
-    public int gateValue;
+    public int gateValue; // 0-> Start / 20->Boss
     public int testnum = 0;
 
     private void Start()
     {
         player = FindObjectOfType<PlayerM>();
-        box = GetComponent<BoxCollider>();
+        // box = GetComponent<BoxCollider>();
 
         box.enabled = false;
         GateImport();
@@ -96,7 +106,11 @@ public class Gate : MonoBehaviour
         
         transform.position = new Vector3(x, y, z);
 
-        box.enabled = false;
+        float x1 = otherGate.transform.position.x;
+        float y1 = otherGate.transform.position.y - gateMoveValue;
+        float z1 = otherGate.transform.position.z;
+
+        otherGate.transform.position = new Vector3(x1, y1, z1);
     }
 
     public void GateOpen()
@@ -106,9 +120,13 @@ public class Gate : MonoBehaviour
         float x = transform.position.x;
         float y = transform.position.y + gateMoveValue;
         float z = transform.position.z;
-        
-        transform.position = new Vector3(x, y, z);
 
+        float x1 = otherGate.transform.position.x;
+        float y1 = otherGate.transform.position.y + gateMoveValue;
+        float z1 = otherGate.transform.position.z;
+
+        transform.position = new Vector3(x, y, z);
+        otherGate.transform.position = new Vector3(x1, y1, z1);
     }
 
     public void StageClear()
@@ -130,8 +148,10 @@ public class Gate : MonoBehaviour
             {
                 box.enabled = true;
             }
-            else if (gateValue != 20)
+            else
+            {
                 box.enabled = true;
+            }
         }
 
     }
@@ -139,21 +159,24 @@ public class Gate : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         
-        if (other.tag == "Player")
+        if (other.tag == "Player" && box.enabled == true)
         {
-            if (box.enabled == true)
-            {
-                GateOpen();
-            }
+            GateOpen();
+            box.enabled = false;
         }
-
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player" && box.enabled == true)
         {
-            GateClose();
+            StartCoroutine(Close());
         }
+    }
+
+    IEnumerator Close()
+    {
+        yield return new WaitForSeconds(0.5f);
+        GateClose();
     }
 }

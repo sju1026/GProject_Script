@@ -1,3 +1,12 @@
+/*
+ 작성자 : 서재웅
+ 날짜 : 2023 - 12 - 07
+ 기능
+// AllBoss 클래스는 여러 종류의 보스를 관리하며, 플레이어를 추적하고 공격하는 기능을 담당합니다.
+// 보스의 종류에 따라 다양한 공격 패턴을 실행하고, 플레이어와의 상호작용으로 피해를 입거나 아이템을 드랍합니다.
+// 또한 보스가 죽으면 해당 보스의 씬 클리어 및 다음 위치로 이동하는 동작을 수행합니다.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;

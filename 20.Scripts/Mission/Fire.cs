@@ -15,7 +15,6 @@ public class Fire : MonoBehaviour
 
     private void Update()
     {
-
         if (isLight == true)
         {
             lighting.enabled = true;
