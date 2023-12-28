@@ -7,11 +7,9 @@
 // 입력, 움직임, 스킬 사용, 상호작용, 플레이어 상태 감지, 피해 처리, 능력치 조정 등을 처리합니다.
  */
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using XEntity.InventoryItemSystem;
 using Cinemachine;
+using System.Collections;
+using UnityEngine;
 
 public class PlayerM : MonoBehaviour
 {
@@ -218,15 +216,15 @@ public class PlayerM : MonoBehaviour
         Vector2 scrollDelta = Input.mouseScrollDelta;
 
         Debug.Log("Up");
-        virtualCam.m_Lens.FieldOfView = Mathf.Clamp(virtualCam.m_Lens.FieldOfView -  scrollDelta.y, 40, 100);
-        
+        virtualCam.m_Lens.FieldOfView = Mathf.Clamp(virtualCam.m_Lens.FieldOfView - scrollDelta.y, 40, 100);
+
     }
     #endregion
 
     #region Skills
     void Boost()
     {
-        if (bDown && moveVec == Vector3.zero && mp >=weapon.skillcostMp && !isJump && !isDodge && !isDead && weapon.isBoost)
+        if (bDown && moveVec == Vector3.zero && mp >= weapon.skillcostMp && !isJump && !isDodge && !isDead && weapon.isBoost)
         {
             Debug.Log("BOOST");
             mp -= weapon.skillcostMp;
@@ -348,7 +346,7 @@ public class PlayerM : MonoBehaviour
             {
                 GameManager.instance.PlayerDie();
             }
-     
+
         }
 
         if (other.tag == "Item")

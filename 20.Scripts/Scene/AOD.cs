@@ -20,6 +20,7 @@ public class AOD : MonoBehaviour
     public GameObject playPanel;
     public GameObject diePanel;
     public GameObject pausePanel;
+    public GameObject clearPanel;
     public Button replayBtn;
     public Button exitBtn;
 
@@ -89,7 +90,7 @@ public class AOD : MonoBehaviour
         boostTxt.text = player.boostLevel.ToString();
 
         // CheckMonster();
-
+        
     }
 
     public void Replay()

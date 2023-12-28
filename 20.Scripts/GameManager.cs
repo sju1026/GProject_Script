@@ -7,14 +7,9 @@
 // 미션 완료 여부를 추적하고, 플레이어 사망 시 상태를 초기화하고 패널을 표시하여 게임 상태를 관리합니다.
  */
 
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using XEntity.InventoryItemSystem;
-using UnityEngine.UI;
 using Cinemachine;
+using UnityEngine;
+using XEntity.InventoryItemSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,7 +36,7 @@ public class GameManager : MonoBehaviour
     Interactor interactor;
     public AOD aod;
     public bool isStart = false;
-    [SerializeField]int stageNum;
+    public int stageNum;
     public GameObject warriorPrefeb;
     public GameObject archorPrefeb;
     public Transform startPoint;
@@ -83,7 +78,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] stage13;
     public GameObject[] stage_Boss;
 
-    [Header("Reward")]
+    [Header("Misssion Reward")]
     public GameObject box;
     public GameObject Tp;
 
@@ -105,7 +100,7 @@ public class GameManager : MonoBehaviour
                 warrior.transform.position = new Vector3(0, 0.11f, 0);
                 selectNum++;
             }
-            if(stageNum == 2 & selectNum == 0)
+            if (stageNum == 2 & selectNum == 0)
             {
                 GameObject archor = Instantiate(archorPrefeb);
                 archor.transform.position = new Vector3(0, 0.11f, 0);
@@ -142,15 +137,54 @@ public class GameManager : MonoBehaviour
     {
         if (stageNum == 3)
         {
-            if (stage1Monster.Length == 0)
+            int test1 = 0;
+            int test2 = 0;
+            int test3 = 0;
+            // ----------------------MisisonStage1----------------------
+            for (int i = 0; i < stage1Monster.Length; i++)
+            {
+                if (stage1Monster[i] == null)
+                {
+                    test1++;
+                }
+                else
+                {
+                    test1 += 0;
+                }
+            }
+            if (test1 >= stage1Monster.Length)
             {
                 other1Door.SetActive(true);
             }
-            else if (stage2Monster.Length == 0)
+            // ----------------------MisisonStage2----------------------
+            for (int i = 0; i < stage2Monster.Length; i++)
+            {
+                if (stage2Monster[i] == null)
+                {
+                    test2++;
+                }
+                else
+                {
+                    test2 += 0;
+                }
+            }
+            if (test2 >= stage2Monster.Length)
             {
                 other2Door.SetActive(true);
             }
-            else if (stage3Monster.Length == 0)
+            // ----------------------MisisonStage3----------------------
+            for (int i = 0; i < stage3Monster.Length; i++)
+            {
+                if (stage3Monster[i] == null)
+                {
+                    test3++;
+                }
+                else
+                {
+                    test3 += 0;
+                }
+            }
+            if (test3 >= stage3Monster.Length)
             {
                 other3Door.SetActive(true);
             }

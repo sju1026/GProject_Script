@@ -10,6 +10,12 @@ public class NextScene : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            if (GameManager.instance.stageNum == 4)
+            {
+                AOD aod = FindObjectOfType<AOD>();
+                aod.clearPanel.SetActive(true);
+                aod.playPanel.SetActive(false);
+            }
             LoadingSceneController.LoadScene(nextSceneName);
             PlayerM player = other.GetComponent<PlayerM>();
             player.stageClear_Key_Num = 0;

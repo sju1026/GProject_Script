@@ -22,12 +22,13 @@ public class AllBoss : MonoBehaviour
     public int maxHealth;
     public int curHealth;
     public GameObject meleeArea;
-    public GameObject bullet;
     public GameObject[] itemPrefab;
     public bool isDead = false;
     public float defence;
     public int dropcnt = 0;
     public float speed;
+    bool isFound = false;
+    bool isBorder = false;
     public GameObject clearBox;
     public GameObject nextTP;
 
@@ -35,8 +36,7 @@ public class AllBoss : MonoBehaviour
     public Transform target;
     public bool isChase = false;
     public bool attackable = false;
-    public float chaseRange = 3.0f;
-    public bool isFound;
+    public float chaseRange;
 
     public Rigidbody rigid;
     public BoxCollider boxCollider;
@@ -50,19 +50,16 @@ public class AllBoss : MonoBehaviour
     public Transform missilePortA;
     public Transform missilePortB;
 
-    void Awake()
+    void Start()
     {
+        target = FindObjectOfType<PlayerM>().transform;
         rigid = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         nav = GetComponent<NavMeshAgent>();
         mat = GetComponentInChildren<SkinnedMeshRenderer>().material;
         anim = GetComponentInChildren<Animator>();
-        target = FindObjectOfType<PlayerM>().transform;
         findSphere = GetComponent<SphereCollider>();
-    }
 
-    private void Start()
-    {
         nav.speed = 0;
     }
 
@@ -75,7 +72,7 @@ public class AllBoss : MonoBehaviour
 
     void Update()
     {
-        if (nav.enabled && target != null)
+        if (nav.enabled && target != null && !isBorder)
         {
             nav.SetDestination(target.position);
         }
@@ -127,6 +124,19 @@ public class AllBoss : MonoBehaviour
         {
             Think();
         }
+    }
+
+    void StopToWall()
+    {
+        Debug.DrawRay(transform.position, transform.forward * 2, Color.green);
+        isBorder = Physics.Raycast(transform.position, transform.forward, 3, LayerMask.GetMask("Wall"));
+    }
+
+    void FixedUpdate()
+    {
+        StopToWall();
+        Targerting();
+        FreezeVeloCity();
     }
 
     void Think()
@@ -189,17 +199,11 @@ public class AllBoss : MonoBehaviour
     }
     #endregion
 
-    void FixedUpdate()
-    {
-        Targerting();
-        FreezeVeloCity();
-    }
-
     public void DropItem()
     {
         if (dropcnt == 0)
         {
-            int rand = Random.Range(0, 3);
+            int rand = Random.Range(0, itemPrefab.Length);
             Vector3 spawnItem = new Vector3(transform.position.x, transform.position.y + 3.0f, transform.position.z);
             Instantiate(itemPrefab[rand], spawnItem, transform.rotation);
             dropcnt++;
