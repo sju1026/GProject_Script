@@ -31,7 +31,6 @@ UI<br/>
 - 우측 상단 : MiniMap<br/>
 - 좌측 하단 : Player State<br/>
 - 우측 하단 : CoolTime<br/>
-
 Explanation<br/>
 - 처음 시작맵인 사막 맵에서 몬스터와 대치하는 상황입니다<br/>
 - 몬스터는 죽으면 Star(스킬 강화 아이템)와 Heart(체력 회복 아이템)을 랜덤적인 확률로 드랍합니다<br/>
