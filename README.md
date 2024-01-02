@@ -3,7 +3,7 @@
 * 졸업 작품으로 만든 게임의 코드를 업로드 했습니다.<br/> 
 
 ## Genre<br/> 
-- 3D LogLike
+- 3D LOGLIKE
 
 ## Take On Part
 - Level Design And Level Production<br/>
