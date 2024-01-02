@@ -18,11 +18,16 @@ public class LoadingSceneController : MonoBehaviour
     static string nextScene;
     public static bool startScene;
 
+    public Image background;
+
+    public Sprite[] sprites;
+
     [SerializeField]
     Image progressBar;
 
     PlayerM player;
     AOD aod;
+
     public static void LoadScene(string sceneName)
     {
         nextScene = sceneName;
@@ -42,6 +47,9 @@ public class LoadingSceneController : MonoBehaviour
     {
         AsyncOperation op =  SceneManager.LoadSceneAsync(nextScene);
         op.allowSceneActivation = false;
+
+        int randomSpriteNum = Random.Range(0, sprites.Length);
+        background.sprite = sprites[randomSpriteNum];
 
         player.rb.useGravity = false;
         player.gameObject.SetActive(false);

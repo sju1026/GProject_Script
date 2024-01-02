@@ -284,7 +284,7 @@ public class Weapons : MonoBehaviour
         Rigidbody bulletRb = instantBullet.GetComponent<Rigidbody>();
         bulletRb.velocity = bulletPos.forward * 50;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         swordArea.enabled = false;
         trailEffect.enabled = false;
 

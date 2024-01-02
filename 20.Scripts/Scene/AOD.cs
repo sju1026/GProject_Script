@@ -49,7 +49,7 @@ public class AOD : MonoBehaviour
     public bool isPause = false;
 
 
-    private void Awake()
+    private void Start()
     {
         player = FindObjectOfType<PlayerM>();
         DontDestroyOnLoad(this);
