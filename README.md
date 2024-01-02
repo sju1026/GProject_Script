@@ -22,7 +22,9 @@
 * 각 씬의 테마로는 사막, 숲, 눈산지역으로 이루어져 있습니다.
 
 ## Exemplary Photography
+
 ![주석 2023-12-27 180106](https://github.com/sju1026/GProject_Script/assets/128655662/e844fdfc-6755-4400-9434-3d34af36a428)<br/>
+
 <h3>The First Picture</h3>
 UI<br/>
 - 좌측 상단 : Play Time<br/>
@@ -36,6 +38,7 @@ Explanation<br/>
 - 각 Stage마다 몬스터가 존재하며 몬스터를 전부 처치하지 않을 경우에는 Gate가 막아 이동이 불가능합니다<br/>
 
 ![주석 2023-12-27 182928](https://github.com/sju1026/GProject_Script/assets/128655662/047257cf-52c0-4ab8-a416-03ffe394897d)<br/>
+
 <h3>The Second Picture</h3>
 Explanation<br/>
 - 기믹의 예시 사진입니다<br/>
