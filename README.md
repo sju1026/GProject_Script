@@ -1,4 +1,4 @@
-# GProject_Script
+# GProject_Script / IRREGULAR
 - It's the script of graduation work.<br/> 
 * 졸업 작품으로 만든 게임의 코드를 업로드 했습니다.<br/> 
 
@@ -49,3 +49,6 @@ Explanation<br/>
 Explanation<br/>
 - 전투에 예시 사진입니다<br/>
 - 상자가 있는 방이 존재하며 몬스터를 처치하고 상자를 상호작용하면 Player State강화 아이템이 생성됩니다<br/>
+
+## GantChart
+![IRREGULAR_Gandchartt](https://github.com/sju1026/GProject_Script/assets/128655662/e35638bc-7d1e-4444-be1d-8a8953749314)
