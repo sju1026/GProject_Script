@@ -37,7 +37,7 @@ Explanation<br/>
 - 몬스터는 죽으면 Star(스킬 강화 아이템)와 Heart(체력 회복 아이템)을 랜덤적인 확률로 드랍합니다<br/>
 - 각 Stage마다 몬스터가 존재하며 몬스터를 전부 처치하지 않을 경우에는 Gate가 막아 이동이 불가능합니다<br/>
 
-![주석 2023-12-27 182928](https://github.com/sju1026/GProject_Script/assets/128655662/047257cf-52c0-4ab8-a416-03ffe394897d)<br/><br/>
+![주석 2023-12-27 182928](https://github.com/sju1026/GProject_Script/assets/128655662/047257cf-52c0-4ab8-a416-03ffe394897d)<br/>
 
 <h3>The Second Picture</h3>
 Explanation<br/>
@@ -46,7 +46,7 @@ Explanation<br/>
 - 전체 기둥을 On시킨 경우 보이는 Box와 TP에 사용되는 Cube가 생성됩니다<br/>
 - Box의 경우 BossStage에 입장하게 해주는 Key를 무조건 Drop하게 되며 이는 보스 처치 후 다음 씬으로 이동하면 초기화 됩니다<br/>
 
-![주석 2023-12-27 182928](https://github.com/sju1026/GProject_Script/assets/128655662/047257cf-52c0-4ab8-a416-03ffe394897d) <br/>
+![주석 2023-12-27 182928](https://github.com/sju1026/GProject_Script/assets/128655662/047257cf-52c0-4ab8-a416-03ffe394897d) <br/><br/>
 
 <h3>The Third Picture</h3>
 Explanation<br/>
