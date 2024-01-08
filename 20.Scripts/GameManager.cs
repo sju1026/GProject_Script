@@ -84,6 +84,10 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        if(instance != this)
+        {
+            Destroy(gameObject);
+        }
         isStart = true;
         this.enabled = true;
         StageCreateCharacter();
