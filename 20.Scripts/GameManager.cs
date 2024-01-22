@@ -62,22 +62,6 @@ public class GameManager : MonoBehaviour
     public int num = 0;
     public bool missionClear = false;
 
-    [Header("Stage Gate")]
-    public GameObject[] stage1;
-    public GameObject[] stage2;
-    public GameObject[] stage3;
-    public GameObject[] stage4;
-    public GameObject[] stage5;
-    public GameObject[] stage6;
-    public GameObject[] stage7;
-    public GameObject[] stage8;
-    public GameObject[] stage9;
-    public GameObject[] stage10;
-    public GameObject[] stage11;
-    public GameObject[] stage12;
-    public GameObject[] stage13;
-    public GameObject[] stage_Boss;
-
     [Header("Misssion Reward")]
     public GameObject box;
     public GameObject Tp;

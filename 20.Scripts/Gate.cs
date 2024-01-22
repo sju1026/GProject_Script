@@ -16,6 +16,7 @@ public class Gate : MonoBehaviour
 {
     public GameObject[] stageList;
     public GameObject otherGate;
+    public GateManager gateManager;
 
     public PlayerM player;
     public BoxCollider box;
@@ -28,6 +29,7 @@ public class Gate : MonoBehaviour
     {
         player = FindObjectOfType<PlayerM>();
         // box = GetComponent<BoxCollider>();
+        gateManager = FindObjectOfType<GateManager>();
 
         box.enabled = false;
         GateImport();
@@ -42,58 +44,58 @@ public class Gate : MonoBehaviour
     {
         if (gateValue == 1)
         {
-            stageList = GameManager.instance.stage1;
+            stageList = gateManager.stage1;
         }
         else if (gateValue == 2)
         {
-            stageList = GameManager.instance.stage2;
+            stageList = gateManager.stage2;
         }
         else if (gateValue == 3)
         {
-            stageList = GameManager.instance.stage3;
+            stageList = gateManager.stage3;
         }
         else if (gateValue == 4)
         {
-            stageList = GameManager.instance.stage4;
+            stageList = gateManager.stage4;
         }
         else if (gateValue == 5)
         {
-            stageList = GameManager.instance.stage5;
+            stageList = gateManager.stage5;
         }
         else if (gateValue == 6)
         {
-            stageList = GameManager.instance.stage6;
+            stageList = gateManager.stage6;
         }
         else if (gateValue == 7)
         {
-            stageList = GameManager.instance.stage7;
+            stageList = gateManager.stage7;
         }
         else if (gateValue == 8)
         {
-            stageList = GameManager.instance.stage8;
+            stageList = gateManager.stage8;
         }
         else if (gateValue == 9)
         {
-            stageList = GameManager.instance.stage9;
+            stageList = gateManager.stage9;
         }
         else if (gateValue == 10)
         {
-            stageList = GameManager.instance.stage10;
+            stageList = gateManager.stage10;
         }
         else if (gateValue == 11)
         {
-            stageList = GameManager.instance.stage11;
+            stageList = gateManager.stage11;
         }
         else if (gateValue == 12)
         {
-            stageList = GameManager.instance.stage12;
+            stageList = gateManager.stage12;
         }
         else if (gateValue == 13)
         {
-            stageList = GameManager.instance.stage13;
+            stageList = gateManager.stage13;
         }
         else if (gateValue == 20)
-            stageList = GameManager.instance.stage_Boss;
+            stageList = gateManager.stage_Boss;
     }
 
     public void GateClose()

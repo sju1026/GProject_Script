@@ -17,7 +17,6 @@ public class NextScene : MonoBehaviour
                 aod.playPanel.SetActive(false);
             }
             LoadingSceneController.LoadScene(nextSceneName);
-            GameManager.m_instance = null;
             PlayerM player = other.GetComponent<PlayerM>();
             player.stageClear_Key_Num = 0;
             player.transform.position = new Vector3(0, 0.11f, 0);
