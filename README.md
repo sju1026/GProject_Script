@@ -45,7 +45,7 @@ Explanation<br/>
 - 전체 기둥을 On시킨 경우 보이는 Box와 TP에 사용되는 Cube가 생성됩니다<br/>
 - Box의 경우 BossStage에 입장하게 해주는 Key를 무조건 Drop하게 되며 이는 보스 처치 후 다음 씬으로 이동하면 초기화 됩니다<br/><br/>
 
-![주석 2023-12-27 182928](https://github.com/sju1026/GProject_Script/assets/128655662/047257cf-52c0-4ab8-a416-03ffe394897d) <br/>
+![주석 2023-12-27 183133](https://github.com/sju1026/GProject_Script/assets/128655662/59f5fa7f-2311-4ca7-912f-194901ed734b)<br/>
 
 <h3>The Third Picture</h3>
 Explanation<br/>
