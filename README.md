@@ -7,8 +7,8 @@
 ## **목차**
 - [**Project**](#project)
     - [Genre](#genre)
-    - [Take On Part](#take-on-part)
     - [Explanation](#explanation)
+    - [Take On Part](#take-on-part)
     - [Techniques](#techniques)
 - [**Scene**](#scene)
     - [Player Viewport](#player-viewport)
