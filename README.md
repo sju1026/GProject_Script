@@ -67,7 +67,7 @@
 
 <br>
 
-### **World Gimice**
+### **World Gimic**
 ![주석 2023-12-27 182928](https://github.com/sju1026/GProject_Script/assets/128655662/047257cf-52c0-4ab8-a416-03ffe394897d)
 ###### **Explanation**
 - 기믹의 예시 사진입니다.
